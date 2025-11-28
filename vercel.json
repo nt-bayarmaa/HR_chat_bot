@@ -1,0 +1,12 @@
+{
+	"buildCommand": "bun run build:rpc",
+	"installCommand": "bun install",
+	"framework": null,
+	"rewrites": [
+		{
+			"source": "/(.*)",
+			"destination": "/apps/api/src/index.ts"
+		}
+	]
+}
+
