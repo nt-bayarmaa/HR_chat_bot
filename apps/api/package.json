@@ -1,0 +1,30 @@
+{
+	"name": "@hr_chatbot/api",
+	"private": true,
+	"exports": {
+		"./rpc": {
+			"import": {
+				"default": "./dist/lib/rpc.js",
+				"types": "./dist/lib/rpc.d.ts"
+			}
+		}
+	},
+	"scripts": {
+		"dev": "bun --hot ./src/index.ts",
+		"dev:rpc": "tsc -p tsconfig.rpc.json --watch --preserveWatchOutput true",
+		"build:rpc": "tsc -p tsconfig.rpc.json",
+		"prod": "NODE_ENV=production bun ./src/index.ts",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@hono/swagger-ui": "^0.5.1",
+		"@hono/zod-openapi": "^1.1.4",
+		"@hono/zod-validator": "^0.4.2",
+		"@hr_chatbot/constants": "workspace:*",
+		"@hr_chatbot/db": "workspace:*",
+		"@slack/web-api": "^7.0.0",
+		"openai": "^4.0.0",
+		"zod": "catalog:"
+	}
+}
+

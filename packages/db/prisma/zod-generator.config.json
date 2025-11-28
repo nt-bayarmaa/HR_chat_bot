@@ -1,0 +1,8 @@
+{
+	"mode": "full",
+	"output": "../../schemas/generated/zod",
+	"useMultipleFiles": false,
+	"singleFileName": "index.ts",
+	"pureModels": true
+}
+

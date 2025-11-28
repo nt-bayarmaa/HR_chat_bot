@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/prisma-client"
+}
+
+generator zod {
+  provider = "prisma-zod-generator"
+  config   = "./zod-generator.config.json"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model BotUser {
+  id          String   @id @default(cuid())
+  slackUserId String   @unique
+  threadId    String?  // OpenAI thread ID for conversation context
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+

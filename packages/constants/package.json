@@ -1,0 +1,9 @@
+{
+	"name": "@hr_chatbot/constants",
+	"private": true,
+	"description": "Constants that are used across the projects.",
+	"exports": {
+		".": "./index.ts"
+	}
+}
+

@@ -1,0 +1,29 @@
+{
+	"name": "@hr_chatbot/db",
+	"exports": {
+		".": "./src/index.ts"
+	},
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"run-with-api-env": "bun --env-file ../../apps/api/.env",
+		"seed": "bun run-with-api-env ./src/seed",
+		"studio": "bun run-with-api-env prisma studio",
+		"generate": "bun run-with-api-env prisma generate",
+		"push": "bun run-with-api-env prisma db push --force-reset",
+		"postinstall": "bun run generate || true"
+	},
+	"//": [
+		"Until the production release, the `push` script is set to enable `--force-reset` flag since we don't care about losing test data"
+	],
+	"dependencies": {
+		"@prisma/client": "6.13.0",
+		"@hr_chatbot/utils": "workspace:*",
+		"prisma-zod-generator": "1.27.4",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"prisma": "6.13.0"
+	}
+}
+

@@ -1,0 +1,36 @@
+{
+	"name": "hr_chatbot",
+	"version": "0.0.1",
+	"private": true,
+	"workspaces": {
+		"packages": [
+			"packages/*",
+			"apps/*"
+		],
+		"catalog": {
+			"zod": "^4.1.12"
+		}
+	},
+	"scripts": {
+		"dev": "turbo run dev dev:rpc --parallel",
+		"build": "turbo run build",
+		"build:rpc": "turbo run build:rpc",
+		"run:db": "bun --elide-lines 0 --filter './packages/db'",
+		"run:api": "bun --elide-lines 0 --filter './apps/api'",
+		"lint": "biome check --write .",
+		"typecheck": "turbo run typecheck",
+		"ngrok": "ngrok http 3000"
+	},
+	"dependencies": {
+		"date-fns": "^4.1.0",
+		"hono": "^4.7.0"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.1.2",
+		"@types/bun": "^1.2.5",
+		"typescript": "^5.8.2",
+		"turbo": "^2.5.8"
+	},
+	"packageManager": "bun@1.2.20"
+}
+

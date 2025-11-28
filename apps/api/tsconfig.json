@@ -1,0 +1,22 @@
+{
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		// Enable latest features
+		"lib": ["ESNext"],
+		"target": "ESNext",
+		"module": "ESNext",
+
+		// Bundler mode
+		"moduleResolution": "bundler",
+		"verbatimModuleSyntax": true,
+		"paths": {
+			"@api/*": ["./src/*"],
+			"@hr_chatbot/db": ["../../packages/db/src/index.ts"],
+			"@hr_chatbot/constants": ["../../packages/constants/index.ts"],
+			"@hr_chatbot/utils": ["../../packages/utils/src/index.ts"]
+		}
+	},
+	"include": ["./src"],
+	"exclude": ["generated/**/*"]
+}
+
