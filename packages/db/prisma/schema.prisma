@@ -9,7 +9,8 @@ generator zod {
 }
 
 datasource db {
-  provider = "sqlite"
+  // provider = "sqlite" 
+  provider = "postgresql" // use vercel
   url      = env("DATABASE_URL")
 }
 
