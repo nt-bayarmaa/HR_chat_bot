@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { prisma } from "@api/lib/prisma";
+// import { prisma } from "@api/lib/prisma"; // Database temporarily disabled
 
 const openai = new OpenAI({
 	apiKey: process.env.OPENAI_API_KEY || "",
@@ -31,28 +31,29 @@ function removeFileCitations(text: string): string {
 	return text.replace(/【\d+(?::\d+(?:-\d+)?)?†[^】]+】/g, "").trim();
 }
 
+// Database temporarily disabled - creating new thread each time
 async function getOrCreateThread(slackUserId: string): Promise<string> {
-	const botUser = await prisma.botUser.findUnique({
-		where: { slackUserId },
-	});
+	// const botUser = await prisma.botUser.findUnique({
+	// 	where: { slackUserId },
+	// });
 
-	if (botUser?.threadId) {
-		return botUser.threadId;
-	}
+	// if (botUser?.threadId) {
+	// 	return botUser.threadId;
+	// }
 
 	const thread = await openai.beta.threads.create();
 	console.log("thread",thread);
 
-	await prisma.botUser.upsert({
-		where: { slackUserId },	
-		create: {
-			slackUserId,
-			threadId: thread.id,
-		},
-		update: {
-			threadId: thread.id,
-		},
-	});
+	// await prisma.botUser.upsert({
+	// 	where: { slackUserId },	
+	// 	create: {
+	// 		slackUserId,
+	// 		threadId: thread.id,
+	// 	},
+	// 	update: {
+	// 		threadId: thread.id,
+	// 	},
+	// });
 
 	return thread.id;
 }
