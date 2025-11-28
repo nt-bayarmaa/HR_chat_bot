@@ -15,7 +15,7 @@
 		"dev": "turbo run dev dev:rpc --parallel",
 		"build": "turbo run build",
 		"build:rpc": "turbo run build:rpc",
-		"run:db": "bun --elide-lines 0 --filter './packages/db'",
+		"run:db": "bun --elide-lines 0 --filter '@hr_chatbot/db'",
 		"run:api": "bun --elide-lines 0 --filter './apps/api'",
 		"lint": "biome check --write .",
 		"typecheck": "turbo run typecheck",
