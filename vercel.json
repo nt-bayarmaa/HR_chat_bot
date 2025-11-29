@@ -1,5 +1,5 @@
 {
-	"buildCommand": "bun run build:rpc && mkdir -p public && echo '<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>API</title></head><body><h1>API</h1></body></html>' > public/index.html",
+	"buildCommand": "bun run build:rpc && mkdir -p public && echo '<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>API in vercel</title></head><body><h1>API</h1></body></html>' > public/index.html",
 	"outputDirectory": "public",
 	"functions": {
 		"api/**/*.ts": {
