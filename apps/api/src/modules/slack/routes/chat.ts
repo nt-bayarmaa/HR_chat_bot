@@ -1,7 +1,7 @@
 import { OpenApiTags } from "@api/constants";
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { verifySlackSignature, sendSlackMessage, updateSlackMessage } from "../lib/slack";
-import { processMessageWithChat } from "../lib/openai";
+import { processMessageWithChatStream } from "../lib/openai";
 
 const openAPIDefinition = createRoute({
 	path: "/events/chat",
@@ -120,17 +120,32 @@ const route = new OpenAPIHono().openapi(openAPIDefinition, async (c) => {
 			(async () => {
 				let thinkingMessageTs: string | undefined;
 				let responseSent = false;
+				let accumulatedText = "";
 
 				try {
 					thinkingMessageTs = await sendSlackMessage(channel, "Бодож байна...");
 
-					const response = await processMessageWithChat(cleanText);
+					// Streaming: Нэг удаа холбогдоод, хариулт иртэл утсаа таслахгүй хүлээх
+					for await (const chunk of processMessageWithChatStream(cleanText)) {
+						accumulatedText += chunk;
+						
+						// Slack руу incremental update хийх (хэсэг хэсгээр нь шинэчлэх)
+						if (thinkingMessageTs && accumulatedText.length > 0) {
+							try {
+								await updateSlackMessage(channel, thinkingMessageTs, accumulatedText);
+								responseSent = true;
+							} catch (updateError) {
+								console.error("Error updating message:", updateError);
+							}
+						}
+					}
 
-					if (thinkingMessageTs) {
-						await updateSlackMessage(channel, thinkingMessageTs, response);
+					// Эцсийн update (бүх текст ирсэн)
+					if (thinkingMessageTs && accumulatedText.length > 0) {
+						await updateSlackMessage(channel, thinkingMessageTs, accumulatedText);
 						responseSent = true;
-					} else {
-						await sendSlackMessage(channel, response);
+					} else if (!responseSent && accumulatedText.length > 0) {
+						await sendSlackMessage(channel, accumulatedText);
 						responseSent = true;
 					}
 				} catch (error) {

@@ -74,20 +74,24 @@ export async function processMessageWithAssistant(
 		content: message,
 	});
 
-	const run = await openai.beta.threads.runs.create(threadId, {
+	// Use streaming approach: create run with stream: true instead of polling
+	const stream = openai.beta.threads.runs.stream(threadId, {
 		assistant_id: assistantId,
 	});
-	console.log("run",run.id);
-
-	let runStatus = await openai.beta.threads.runs.retrieve(threadId, run.id);
-	console.log("runStatus1",runStatus);
-
-	while (runStatus.status === "queued" || runStatus.status === "in_progress") {
-		await new Promise((resolve) => setTimeout(resolve, 500)); 
-		runStatus = await openai.beta.threads.runs.retrieve(threadId, run.id);
+	
+	let finalStatus: string | null = null;
+	for await (const event of stream) {
+		if (event.event === "thread.run.completed") {
+			finalStatus = "completed";
+			break;
+		}
+		if (event.event === "thread.run.failed") {
+			finalStatus = "failed";
+			break;
+		}
 	}
 
-	if (runStatus.status === "completed") {
+	if (finalStatus === "completed") {
 		const messages = await openai.beta.threads.messages.list(threadId, {
 			limit: 1,
 		});
@@ -105,13 +109,13 @@ export async function processMessageWithAssistant(
 		}
 	}
 
-	if (runStatus.status === "failed") {
+	if (finalStatus === "failed") {
 		throw new Error(
-			`OpenAI run failed: ${runStatus.last_error?.message || "Unknown error"}`,
+			`OpenAI run failed: Unknown error`,
 		);
 	}
 
-	throw new Error(`Unexpected run status: ${runStatus.status}`);
+	throw new Error(`Unexpected run status: ${finalStatus || "unknown"}`);
 }
 
 export async function processMessageWithAssistantNoContext(
@@ -127,18 +131,24 @@ export async function processMessageWithAssistantNoContext(
 		content: message,
 	});
 
-	const run = await openai.beta.threads.runs.create(threadId, {
+	// Use streaming approach: create run with stream: true instead of polling
+	const stream = openai.beta.threads.runs.stream(threadId, {
 		assistant_id: assistantId,
 	});
-
-	let runStatus = await openai.beta.threads.runs.retrieve(threadId, run.id);
-
-	while (runStatus.status === "queued" || runStatus.status === "in_progress") {
-		await new Promise((resolve) => setTimeout(resolve, 500)); // Wait 500ms
-		runStatus = await openai.beta.threads.runs.retrieve(threadId, run.id);
+	
+	let finalStatus: string | null = null;
+	for await (const event of stream) {
+		if (event.event === "thread.run.completed") {
+			finalStatus = "completed";
+			break;
+		}
+		if (event.event === "thread.run.failed") {
+			finalStatus = "failed";
+			break;
+		}
 	}
 
-	if (runStatus.status === "completed") {
+	if (finalStatus === "completed") {
 		const messages = await openai.beta.threads.messages.list(threadId, {
 			limit: 1,
 		});
@@ -153,13 +163,13 @@ export async function processMessageWithAssistantNoContext(
 		}
 	}
 
-	if (runStatus.status === "failed") {
+	if (finalStatus === "failed") {
 		throw new Error(
-			`OpenAI run failed: ${runStatus.last_error?.message || "Unknown error"}`,
+			`OpenAI run failed: Unknown error`,
 		);
 	}
 
-	throw new Error(`Unexpected run status: ${runStatus.status}`);
+	throw new Error(`Unexpected run status: ${finalStatus || "unknown"}`);
 }
 
 
@@ -188,5 +198,33 @@ export async function processMessageWithChat(
 	}
 
 	return response;
+}
+
+export async function* processMessageWithChatStream(
+	message: string,
+): AsyncGenerator<string, void, unknown> {
+	const stream = await openai.chat.completions.create({
+		model: "gpt-4o-mini",
+		messages: [
+			{
+				role: "system",
+				content:
+					"You are a helpful HR assistant. Answer questions about salary, policies, leave, and other HR-related topics. Be concise, accurate, and professional.",
+			},
+			{
+				role: "user",
+				content: message,
+			},
+		],
+		temperature: 0.7,
+		stream: true,
+	});
+
+	for await (const chunk of stream) {
+		const content = chunk.choices[0]?.delta?.content;
+		if (content) {
+			yield content;
+		}
+	}
 }
 
