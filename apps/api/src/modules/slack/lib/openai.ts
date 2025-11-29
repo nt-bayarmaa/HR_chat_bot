@@ -32,7 +32,7 @@ function removeFileCitations(text: string): string {
 }
 
 // Database temporarily disabled - creating new thread each time
-async function getOrCreateThread(slackUserId: string): Promise<string> {
+async function getOrCreateThread(_slackUserId: string): Promise<string> {
 	// const botUser = await prisma.botUser.findUnique({
 	// 	where: { slackUserId },
 	// });
