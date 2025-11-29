@@ -1,7 +1,5 @@
 {
 	"buildCommand": "bun run build:rpc",
-	"installCommand": "bun install",
-	"framework": null,
 	"functions": {
 		"api/**/*.ts": {
 			"runtime": "bun@1.2.20"
