@@ -1,5 +1,6 @@
 {
 	"buildCommand": "bun run build:rpc",
+	"outputDirectory": "public",
 	"functions": {
 		"api/**/*.ts": {
 			"runtime": "bun@1.2.20"
