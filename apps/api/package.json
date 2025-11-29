@@ -15,7 +15,7 @@
 		"build:rpc": "tsc -p tsconfig.rpc.json",
 		"prod": "NODE_ENV=production bun ./src/index.ts",
 		"typecheck": "tsc --noEmit",
-		"dev:socket": "bun --hot ./src/modules/slack/slacksocketbolt/index.ts"
+		"dev:socket": "bun --hot ./src/modules/slacksocketbolt/index.ts"
 	},
 	"dependencies": {
 		"@hono/swagger-ui": "^0.5.1",

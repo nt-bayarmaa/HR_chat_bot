@@ -2,7 +2,7 @@ import { App, LogLevel } from "@slack/bolt";
 import {
 	processMessageWithAssistant,
 	processMessageWithAssistantNoContext,
-} from "../lib/openai";
+} from "../slack/lib/openai";
 
 const app = new App({
 	token: process.env.SLACK_BOT_TOKEN,
@@ -239,3 +239,4 @@ app.error(async () => {
 });
 
 export default app;
+
