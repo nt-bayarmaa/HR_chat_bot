@@ -13,7 +13,7 @@
 	},
 	"scripts": {
 		"dev": "turbo run dev dev:rpc --parallel",
-		"build": "turbo run build",
+		"build": "bun run build:rpc && mkdir -p public && echo '<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>API</title></head><body><h1>API</h1></body></html>' > public/index.html",
 		"build:rpc": "turbo run build:rpc",
 		"run:db": "bun --elide-lines 0 --filter '@hr_chatbot/db'",
 		"run:api": "bun --elide-lines 0 --filter './apps/api'",
