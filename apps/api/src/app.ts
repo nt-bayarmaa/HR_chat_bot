@@ -16,7 +16,7 @@ app.get("/", (c) => {
 	});
 });
 
-app.route("/", routes);
+app.route("/api", routes);
 
 app.onError((err, c) => {
 	return c.json(
