@@ -1,5 +1,5 @@
 {
-	"buildCommand": "bun run build:rpc",
+	"buildCommand": "bun run build:rpc && mkdir -p public",
 	"outputDirectory": "public",
 	"functions": {
 		"api/**/*.ts": {
