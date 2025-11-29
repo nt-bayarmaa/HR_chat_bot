@@ -14,7 +14,8 @@
 		"dev:rpc": "tsc -p tsconfig.rpc.json --watch --preserveWatchOutput true",
 		"build:rpc": "tsc -p tsconfig.rpc.json",
 		"prod": "NODE_ENV=production bun ./src/index.ts",
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"dev:socket": "bun --hot ./src/modules/slack/slacksocketbolt/index.ts"
 	},
 	"dependencies": {
 		"@hono/swagger-ui": "^0.5.1",
@@ -22,9 +23,9 @@
 		"@hono/zod-validator": "^0.4.2",
 		"@hr_chatbot/constants": "workspace:*",
 		"@hr_chatbot/db": "workspace:*",
+		"@slack/bolt": "^4.6.0",
 		"@slack/web-api": "^7.0.0",
 		"openai": "^4.0.0",
 		"zod": "catalog:"
 	}
 }
-

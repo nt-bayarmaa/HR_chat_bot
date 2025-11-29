@@ -17,6 +17,7 @@
 		"build:rpc": "turbo run build:rpc",
 		"run:db": "bun --elide-lines 0 --filter '@hr_chatbot/db'",
 		"run:api": "bun --elide-lines 0 --filter './apps/api'",
+		"dev:socket": "cd apps/api && bun run dev:socket",
 		"lint": "biome check --write .",
 		"typecheck": "turbo run typecheck",
 		"ngrok": "ngrok http 3000"
